@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.hillel.homework_34.dto.ProductDto;
 import org.hillel.homework_34.service.ProductService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,11 +23,13 @@ public class ProductController {
     public ResponseEntity<ProductDto> getProductById(@PathVariable("id") int id){
         return ResponseEntity.ok(service.getById(id));
     }
-    @PostMapping
+    @PostMapping("/add")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" )
     public ResponseEntity<ProductDto> addProducts(@RequestBody ProductDto productDto){
         return ResponseEntity.ok(service.addProduct(productDto));
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')" )
     public ResponseEntity<?> delete(@PathVariable("id")int id){
         service.delete(id);
         return ResponseEntity.ok().build();
